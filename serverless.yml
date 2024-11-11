@@ -17,10 +17,17 @@ provider:
             - "dynamodb:UpdateItem"
             - "dynamodb:DeleteItem"
             - "dynamodb:Query"
+            - "dynamodb:Scan"
           Resource:
             - !GetAtt UsersTable.Arn
 
 functions:
+  getAllUsers:
+    handler: src/user-management-handler.getAllUsers
+    events:
+      - http:
+          path: /users
+          method: get
   getUser:
     handler: src/user-management-handler.getUser
     events:

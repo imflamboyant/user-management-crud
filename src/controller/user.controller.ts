@@ -19,4 +19,9 @@ export class UserController {
             return generateResponse(404, { message: `User with id ${id} not found` });
         }
     }
+
+    public async getAllUsers(): Promise<APIGatewayProxyResult> {
+        const users = await this.userService.getAllUsers();
+        return generateResponse(200, users);
+    }
 }
