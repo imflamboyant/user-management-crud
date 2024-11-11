@@ -21,11 +21,11 @@ provider:
             - !GetAtt UsersTable.Arn
 
 functions:
-  hello:
-    handler: src/handler.helloWorld
+  getUser:
+    handler: src/user-management-handler.getUser
     events:
       - http:
-          path: /
+          path: /users/{id}
           method: get
 
 resources:
