@@ -1,8 +1,6 @@
-# Serverless Framework Node HTTP API on AWS
+# Serverless Framework v4 example REST API
 
-This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.
-
-This template does not include any kind of persistence (database). For more advanced examples, check out the [serverless/examples repository](https://github.com/serverless/examples/) which includes Typescript, Mongo, DynamoDB and other examples.
+This project illustrates a small CRUD REST API for user management, built and deployed with Serverless Framework v4.
 
 ## Usage
 
@@ -11,33 +9,45 @@ This template does not include any kind of persistence (database). For more adva
 In order to deploy the example, you need to run the following command:
 
 ```
-serverless deploy
+serverless deploy --stage dev
 ```
-
-After running deploy, you should see output similar to:
-
-```
-Deploying "serverless-http-api" to stage "dev" (us-east-1)
-
-✔ Service deployed to stack serverless-http-api-dev (91s)
-
-endpoint: GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/
-functions:
-  hello: serverless-http-api-dev-hello (1.6 kB)
-```
-
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [HTTP API (API Gateway V2) event docs](https://www.serverless.com/framework/docs/providers/aws/events/http-api).
 
 ### Invocation
 
-After successful deployment, you can call the created application via HTTP:
+After successful deployment, the API can be called via HTTP endpoints that look something like `https://xxxxxxx.execute-api.region.amazonaws.com/`.
 
-```
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/
-```
+### Available endpoints
 
-Which should result in response similar to:
+* `GET /users`
+* `GET /users/{id}`
+* `POST /users`
+* `PUT /users/{id}`
+* `DELETE /users/{id}`
+
+#### Model
+
+User model is defined by an `id` and several other fields, for example:
 
 ```json
-{ "message": "Go Serverless v4! Your function executed successfully!" }
+{
+  "id": "b43ce652-0c65-462d-ad6f-87db9798d869",
+  "name": "John Doe",
+  "email": "john@example.com",
+  "age": 35
+}
 ```
+
+### Architecture
+
+![Serverless Architecture](doc/architecture.png)
+
+## CI/CD
+
+CI/CD is implemented using AWS CodePipeline with the following stages:
+* Build - performs the build of the app
+* Test - runs unit tests
+* DeployDev - performs serverless deployment to "dev" stage
+* ProdApproval - manual approval step to decide promoting the changes to "prod" stage
+* DeployProd - performs serverless deployment to "prod" stage
+
+![AWS CodePipeline](doc/cicd.gif)
