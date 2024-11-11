@@ -2,6 +2,7 @@ import { UserService } from '../service/user.service';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { generateResponse } from '../util/utils';
 import { UserNotFoundError } from '../util/errors';
+import { Log } from '../util/logger';
 
 export class UserController {
 
@@ -15,6 +16,7 @@ export class UserController {
         }
         const user = await this.userService.getUser(id);
         if (user) {
+            Log.info({ message: 'User retrieved successfully' });
             return generateResponse(200, user);
         } else {
             return generateResponse(404, { message: `User with id ${id} not found` });
@@ -23,6 +25,7 @@ export class UserController {
 
     public async getAllUsers(): Promise<APIGatewayProxyResult> {
         const users = await this.userService.getAllUsers();
+        Log.info({ message: 'Users retrieved successfully' });
         return generateResponse(200, users);
     }
 
@@ -35,6 +38,7 @@ export class UserController {
             return generateResponse(400, { message: 'user name, email and age are mandatory' });
         }
         const createdUser = await this.userService.createUser(user);
+        Log.info({ message: 'User created successfully' });
         return generateResponse(201, createdUser);
     }
 
@@ -53,12 +57,13 @@ export class UserController {
 
         try {
             await this.userService.updateUser(id, updatedUser);
+            Log.info({ message: 'User updated successfully' });
             return { statusCode: 200, body: '' };
         } catch (error) {
             if (error instanceof UserNotFoundError) {
                 return generateResponse(404, { message: error.message });
             }
-            console.error('Error updating user:', error);
+            Log.error({ message: 'Error updating user', error })
             return generateResponse(500, { message: 'Unexpected error updating user' });
         }
     }
@@ -71,12 +76,13 @@ export class UserController {
 
         try {
             await this.userService.deleteUser(id);
+            Log.info({ message: 'User deleted successfully' });
             return { statusCode: 204, body: '' };
         } catch (error) {
             if (error instanceof UserNotFoundError) {
                 return generateResponse(404, { message: error.message });
             }
-            console.error('Error deleting user:', error);
+            Log.error({ message: 'Error deleting user', error })
             return generateResponse(500, { message: 'Unexpected error deleting user' });
         }
     }
