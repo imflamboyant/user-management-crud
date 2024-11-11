@@ -1,0 +1,15 @@
+service: user-management-crud
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-central-1
+  stage: ${sls:stage, 'dev'}
+
+functions:
+  hello:
+    handler: src/handler.helloWorld
+    events:
+      - http:
+          path: /
+          method: get
