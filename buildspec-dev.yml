@@ -3,6 +3,7 @@ phases:
   install:
     commands:
       - npm install -g serverless
+      - npm install
   build:
     commands:
       - serverless deploy --stage dev
