@@ -28,12 +28,30 @@ functions:
       - http:
           path: /users
           method: get
+  createUser:
+    handler: src/user-management-handler.createUser
+    events:
+      - http:
+          path: /users
+          method: post
   getUser:
     handler: src/user-management-handler.getUser
     events:
       - http:
           path: /users/{id}
           method: get
+  updateUser:
+    handler: src/user-management-handler.updateUser
+    events:
+      - http:
+          path: /users/{id}
+          method: put
+  deleteUser:
+    handler: src/user-management-handler.deleteUser
+    events:
+      - http:
+          path: /users/{id}
+          method: delete
 
 resources:
   Resources:

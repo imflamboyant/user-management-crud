@@ -10,5 +10,8 @@
     "@types/aws-lambda": "8.10.145",
     "@types/node": "^22.9.0",
     "typescript": "5.6.3"
+  },
+  "dependencies": {
+    "uuidv4": "^6.2.13"
   }
 }
